@@ -1,8 +1,8 @@
-NAME = btc
+NAME = RPN
 CC = c++
 CFLAGS = -Wall -Wextra -Werror
 ADFLAG = -std=c++98
-SRC = main.cpp BitcoinExchange.cpp
+SRC = main.cpp RPN.cpp
 OBJ = $(SRC:.cpp=.o)
 DBJ = $(SRC:.cpp=.d)
 
