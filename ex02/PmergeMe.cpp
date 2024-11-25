@@ -1,6 +1,7 @@
 #include "PmergeMe.hpp"
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 
 PmergeMe::PmergeMe(char* c[], int s) {
 	for(int i = 1; i < s; i++) {
@@ -22,9 +23,35 @@ void PmergeMe::makeJArr(int d) {
 		J[i] = J[i - 1] + 2 * J[i - 2];
 }
 
-std::vector<std::pair<int, unsigned long> > PmergeMe::mergeVector(std::vector<std::pair<int, unsigned long> > v1, std::vector<std::pair<int, unsigned long> > v2) {
+bool compareFirst(const std::pair<int, unsigned long> &a, const std::pair<int, unsigned long> &b) {
+	return a.first < b.first;
+}
+
+std::vector<std::pair<int, unsigned long> > PmergeMe::mergeVector(std::vector<std::pair<int, unsigned long> > v1, std::vector<std::pair<int, unsigned long> > v2, unsigned long depth) {
 	std::vector<std::pair<int, unsigned long> > v3 = v1;
-	for(unsigned int i = 0; J[i] < )
+	std::pair<int, unsigned long> top = v1[0];
+	std::pair<int, unsigned long> bottom = v2[top.second/pow(2, depth)];
+	v3.insert(v3.begin(), bottom);
+	for(unsigned long i = 1; J[i - 1] <= v1.size(); i++) {
+		for(unsigned long j = std::min(J[i] - 1 , v1.size() - 1); j > J[i - 1]; j--) {
+			top = v1[j];
+			bottom = v2[top.second/pow(2, depth)];
+			std::vector<std::pair<int, unsigned long> >::iterator it = std::upper_bound(v3.begin(), v3.begin() + pow(2, i + 1) - 1, bottom, compareFirst);
+			v3.insert(it, bottom);
+		}
+	}
+	if(v1.size() != v2.size()) {
+		bottom = v2[v2.size() - 1];
+		std::vector<std::pair<int, unsigned long> >::iterator it = std::upper_bound(v3.begin(), v3.end(), bottom);
+		v3.insert(it, bottom);
+	}
+	return v3;
+}
+
+std::vector<std::pair<int, unsigned long> > PmergeMe::testMerge(std::vector<std::pair<int, unsigned long> > v1, std::vector<std::pair<int, unsigned long> > v2) {
+	for(unsigned long i = 0; i < v2.size(); i++) {
+		v1.push_back(v2[i]);
+	}
 	return v1;
 }
 
@@ -41,9 +68,11 @@ std::vector<std::pair<int, unsigned long> > PmergeMe::PmergeVector(std::vector<s
 		v1.push_back(a); v2.push_back(b);
 	}
 	if(i * 2 < v.size()) 
-		v1.push_back(v[i * 2]);
+		v2.push_back(v[i * 2]);
 	v1 = PmergeVector(v1, depth + 1);
-	return mergeVector(v1, v2);
+	// std::vector<std::pair<int, unsigned long> > v3 = testMerge(v1, v2);
+	std::vector<std::pair<int, unsigned long> > v3 = mergeVector(v1, v2, depth);
+	return v3;
 }
 
 // std::list<std::pair<int, unsigned long> > PmergeMe::PmergeList(std::list<std::pair<int, unsigned long> > l, unsigned long depth) {}
@@ -54,10 +83,6 @@ void PmergeMe::DoPmerge() {
 	}
 	std::cout << std::endl;
 	makeJArr(J_MAX);
-	for(int i = 0; i < J_MAX; i++) {
-		std::cout << J[i] << ' ';
-	}
-	std::cout << std::endl;
 	V = PmergeVector(V, 1);
 	for(unsigned long i = 0; i < V.size(); i++) {
 		std::cout << V[i].first << '(' << V[i].second << ')' << ' ';
