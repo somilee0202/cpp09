@@ -1,7 +1,7 @@
 NAME = PmergeMe
 CC = c++
 CFLAGS = -Wall -Wextra -Werror
-ADFLAG = -std=c++98
+ADFLAG = -std=c++98 -fsanitize=address
 SRC = main.cpp PmergeMe.cpp
 OBJ = $(SRC:.cpp=.o)
 DBJ = $(SRC:.cpp=.d)

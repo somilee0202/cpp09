@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <list>
+#include <deque>/////////////////////
 #define J_MAX 30
 
 class PmergeMe {
@@ -11,15 +12,16 @@ private:
 	unsigned long J[J_MAX];
 	std::vector<std::pair<int, unsigned long> > V;
 	std::list<std::pair<int, unsigned long> > L;
+	std::deque<std::pair<int, unsigned long> > D;
 
 	PmergeMe(const PmergeMe &a);
 	PmergeMe &operator=(const PmergeMe &a);
 	PmergeMe();
 	void makeJArr(int d);
-	// bool compareFirst(const std::pair<int, unsigned long> &a, const std::pair<int, unsigned long> &b);
 	std::vector<std::pair<int, unsigned long> > mergeVector(std::vector<std::pair<int, unsigned long> > v1, std::vector<std::pair<int, unsigned long> > v2, unsigned long depth);
 	std::vector<std::pair<int, unsigned long> > PmergeVector(std::vector<std::pair<int, unsigned long> > v, unsigned long depth);
-	// std::list<std::pair<int, unsigned long> > PmergeList(std::list<std::pair<int, unsigned long> > l, unsigned long depth);
+	std::list<std::pair<int, unsigned long> > mergeList(std::list<std::pair<int, unsigned long> > v1, std::list<std::pair<int, unsigned long> > v2, unsigned long depth);
+	std::list<std::pair<int, unsigned long> > PmergeList(std::list<std::pair<int, unsigned long> > l, unsigned long depth);
 public:
 	PmergeMe(char *c[], int s);
 	~PmergeMe();
@@ -30,7 +32,8 @@ public:
 	public:
 		InputError();
 	};
-	std::vector<std::pair<int, unsigned long> > testMerge(std::vector<std::pair<int, unsigned long> > v1, std::vector<std::pair<int, unsigned long> > v2);
+	std::deque<std::pair<int, unsigned long> > mergeDeque(std::deque<std::pair<int, unsigned long> > d1, std::deque<std::pair<int, unsigned long> > d2, unsigned long depth);
+	std::deque<std::pair<int, unsigned long> > PmergeDeque(std::deque<std::pair<int, unsigned long> > d, unsigned long depth);
 };
 
 #endif
