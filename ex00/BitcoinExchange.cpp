@@ -76,7 +76,7 @@ double BitcoinExchange::calculatePrice(std::string date, double amount) {
 }
 
 void BitcoinExchange::getExchange(std::string input_file) {
-	std::ifstream file(input_file);
+	std::ifstream file(input_file.c_str());
 	if (!file.is_open()) {
 		throw WrongInputFile();
 	}
