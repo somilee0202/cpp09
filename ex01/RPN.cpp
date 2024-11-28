@@ -1,5 +1,4 @@
 #include "RPN.hpp"
-#include <iostream>
 #include <sstream>
 
 RPN::RPN() {}
@@ -33,4 +32,4 @@ int RPN::calculateRPN(std::string str) {
 	return s.top();
 }
 
-RPN::InputError::InputError() : logic_error("Error") {}
+RPN::InputError::InputError() : std::logic_error("Error") {}

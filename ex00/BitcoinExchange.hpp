@@ -4,6 +4,8 @@
 #include <map>
 #include <string>
 #include <utility>
+#include <stdexcept>
+#include <climits>
 
 class BitcoinExchange {
 private:

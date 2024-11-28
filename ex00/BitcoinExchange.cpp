@@ -6,7 +6,7 @@
 #include <ctime>
 
 BitcoinExchange::BitcoinExchange(std::string file_name) {
-	std::ifstream file(file_name);
+	std::ifstream file(file_name.c_str());
 	if (!file.is_open()) {
 		throw WrongDataFile();
 	}
@@ -117,6 +117,6 @@ void BitcoinExchange::getExchange(std::string input_file) {
 	file.close();
 }
 
-BitcoinExchange::WrongDataFile::WrongDataFile() : logic_error("Error: wrong data file.") {}
+BitcoinExchange::WrongDataFile::WrongDataFile() : std::logic_error("Error: wrong data file.") {}
 
-BitcoinExchange::WrongInputFile::WrongInputFile() : logic_error("Error: wrong input file.") {}
+BitcoinExchange::WrongInputFile::WrongInputFile() : std::logic_error("Error: wrong input file.") {}
