@@ -3,15 +3,14 @@
 
 #include <iostream>
 #include <vector>
-#include <list>
-#include <deque>/////////////////////
+#include <deque>
 #define J_MAX 30
 
 class PmergeMe {
 private:
+	unsigned long num;
 	unsigned long J[J_MAX];
 	std::vector<std::pair<int, unsigned long> > V;
-	std::list<std::pair<int, unsigned long> > L;
 	std::deque<std::pair<int, unsigned long> > D;
 
 	PmergeMe(const PmergeMe &a);
@@ -20,8 +19,6 @@ private:
 	void makeJArr(int d);
 	std::vector<std::pair<int, unsigned long> > mergeVector(std::vector<std::pair<int, unsigned long> > v1, std::vector<std::pair<int, unsigned long> > v2, unsigned long depth);
 	std::vector<std::pair<int, unsigned long> > PmergeVector(std::vector<std::pair<int, unsigned long> > v, unsigned long depth);
-	std::list<std::pair<int, unsigned long> > mergeList(std::list<std::pair<int, unsigned long> > v1, std::list<std::pair<int, unsigned long> > v2, unsigned long depth);
-	std::list<std::pair<int, unsigned long> > PmergeList(std::list<std::pair<int, unsigned long> > l, unsigned long depth);
 public:
 	PmergeMe(char *c[], int s);
 	~PmergeMe();

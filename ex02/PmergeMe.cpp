@@ -6,13 +6,13 @@
 #include <cmath>
 
 PmergeMe::PmergeMe(char* c[], int s) {
+	num = s;
     for(int i = 1; i < s; i++) {
         std::stringstream ss(c[i]);
         int num = 0;
         ss >> num;
         if(ss.fail()) throw InputError();
         V.push_back(std::make_pair(num, i - 1));
-        L.push_back(std::make_pair(num, i - 1));
 		D.push_back(std::make_pair(num, i - 1));
     }
 }
@@ -73,7 +73,7 @@ std::vector<std::pair<int, unsigned long> > PmergeMe::PmergeVector(std::vector<s
     v1 = PmergeVector(v1, depth + 1);
     return mergeVector(v1, v2, depth);
 }
-/////////////////////////////////////////////////////////
+
 std::deque<std::pair<int, unsigned long> > PmergeMe::mergeDeque(std::deque<std::pair<int, unsigned long> > d1, std::deque<std::pair<int, unsigned long> > d2, unsigned long depth) {
     std::deque<std::pair<int, unsigned long> > d3 = d1;
     std::pair<int, unsigned long> top = d1[0];
@@ -117,66 +117,6 @@ std::deque<std::pair<int, unsigned long> > PmergeMe::PmergeDeque(std::deque<std:
     d1 = PmergeDeque(d1, depth + 1);
     return mergeDeque(d1, d2, depth);
 }
-/////////////////////////////////////////////////////////
-
-std::list<std::pair<int, unsigned long> > PmergeMe::mergeList(std::list<std::pair<int, unsigned long> > l1, std::list<std::pair<int, unsigned long> > l2, unsigned long depth) {
-	std::list<std::pair<int, unsigned long> > l3 = l1;
-    std::pair<int, unsigned long> top = *l1.begin();
-
-	std::list<std::pair<int, unsigned long> >::iterator it = l2.begin();
-	std::advance(it, top.second / static_cast<unsigned long>(pow(2, depth)));
-    std::pair<int, unsigned long> bottom = *it;
-    l3.push_front(bottom);
-
-    for (unsigned long i = 1; J[i - 1] <= l1.size(); i++) {
-        for (unsigned long j = std::min(J[i] - 1, l1.size() - 1); j >= J[i - 1]; j--) {
-			it = l1.begin();
-			std::advance(it, j);
-            top = *it;
-
-			it = l2.begin();
-			std::advance(it, top.second / static_cast<unsigned long>(pow(2, depth)));
-			bottom = *it;
-
-            it = l1.begin();
-			while(it->first < bottom.first) {
-				it++;
-			}
-            l3.insert(it, bottom);
-        }
-    }
-
-    if (l1.size() != l2.size()) {
-        bottom = l2.back();
-		std::list<std::pair<int, unsigned long> >::iterator it = l1.begin();
-		while(it->first < bottom.first) {
-			it++;
-		}
-		l3.insert(it, bottom);
-    }
-
-    return l3;
-}
-
-
-std::list<std::pair<int, unsigned long> > PmergeMe::PmergeList(std::list<std::pair<int, unsigned long> > l, unsigned long depth) {
-    if (l.size() == 1) return l;
-
-    std::list<std::pair<int, unsigned long> > l1, l2;
-    std::list<std::pair<int, unsigned long> >::iterator it = l.begin();
-
-    for (unsigned long i = 0; i < l.size() / 2; ++i) {
-        std::pair<int, unsigned long> a = *it++;
-        std::pair<int, unsigned long> b = *it++;
-
-        if (b.first > a.first) std::swap(a, b);
-        l1.push_back(a); l2.push_back(b);
-    }
-    if (it != l.end()) l2.push_back(*it);
-
-    l1 = PmergeList(l1, depth + 1);
-    return mergeList(l1, l2, depth);
-}
 
 void PmergeMe::DoPmerge() {
     std::cout << "Before: ";
@@ -192,14 +132,9 @@ void PmergeMe::DoPmerge() {
     V = PmergeVector(V, 1);
     clock_t v_end = clock();
 
-    clock_t l_start = clock();
-    L = PmergeList(L, 1);
-    clock_t l_end = clock();
-	//////////////////////////
 	clock_t d_start = clock();
     D = PmergeDeque(D, 1);
     clock_t d_end = clock();
-	//////////////////////////
 
     std::cout << "After: ";
     for(i = 0; i < std::min(V.size(), static_cast<unsigned long>(4)); i++)
@@ -208,9 +143,8 @@ void PmergeMe::DoPmerge() {
         std::cout << V[i].first << std::endl;
     else std::cout << "[...]" << std::endl;
 
-    std::cout << "Time to process a range of 5 elements with std::vector : " << static_cast<double>(v_end - v_start) * 1e6 / CLOCKS_PER_SEC << " us\n";
-    std::cout << "Time to process a range of 5 elements with std::list : " << static_cast<double>(l_end - l_start) * 1e6 / CLOCKS_PER_SEC << " us\n";
-    std::cout << "Time to process a range of 5 elements with std::deque : " << static_cast<double>(d_end - d_start) * 1e6 / CLOCKS_PER_SEC << " us\n";
+    std::cout << "Time to process a range of " <<  num << " elements with std::vector : " << static_cast<double>(v_end - v_start) * 1e6 / CLOCKS_PER_SEC << " us\n";
+    std::cout << "Time to process a range of " << num << " elements with std::deque : " << static_cast<double>(d_end - d_start) * 1e6 / CLOCKS_PER_SEC << " us\n";
 }
 
 PmergeMe::InputError::InputError() : logic_error("Error") {}
